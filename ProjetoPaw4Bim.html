@@ -1,0 +1,311 @@
+<html>
+<head>
+<title>Projeto Paw 4ºBimestre</title>
+
+<style type="text/css">
+p{ font-family: Arial;
+    font-size: 12px;
+    color: blue;
+}
+label {
+    font-family: Arial;
+    font-size: 12px;
+    color: blue;
+}
+h1{ font-family: Arial;
+font-size: 20px;
+color: white;
+background-color : blue;
+padding-left: 580px;
+}
+.classeFundo{background-color: lightblue;
+}
+espaco{padding-left: 100px;}
+espaco2{padding-left:530px;}
+espaco3{padding-left: 50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script type="text/javascript">
+</script>
+</head>
+
+<body>
+
+<h1>DADOS PESSOAIS</h1>
+<table width="1300">
+<tr>
+    <td colspan="5">
+        <p>Nome do Titular</p>
+        <input name="txtNome" id="txtNome" type="text" value="" size="179" style="height:30"/>
+    </td>
+</tr>
+<tr>
+    <td colspan="5">
+        <p>Filiação</p>
+        <input name="txtFiliacao" id="txtFiliacao" type="text" value="" size="179" style="height:30"/>
+    </td>
+</tr>
+</table>
+
+<table width="1300">
+<tr>
+    <td colspan="1" width="400">
+        <p>CPF</p>
+               <input name="txtCPF" id="txtCPF" type="text" value="" style="height:30" size="33px"/>
+    </td>
+    <td colspan="1" width="300">
+        <p>RG</p>
+        <input name="txtRG" id="txtRG" type="text" value="" style="height:30" size="31px"/>
+
+    </td>
+    <td colspan="1" width="200">
+        <p>Órgão Emissor</p>
+        <input name="txtEmissor" id="txtEmissor" type="text" value="" style="height:30" size="30px"/>
+    </td>
+    <td colspan="1" width="200">
+        <p>Data de Nascimento</p>
+        <input name="txtNascimento" id="txtNascimento" type="text" value="" style="height:30" size="30px"/>
+    </td>
+    <td colspan="1" width="200">
+        <p>Sexo</p>
+        <input name="txtSexo" id="txtSexo" type="text" value="" style="height:30" size="30px"/>
+    </td> 
+</tr>
+
+<tr>
+    <td colspan="1" >
+        <p>CEP</p>
+        <input name="txtCEP" id="txtCEP" type="text" value="" style="height:30" size="33px"/>
+    </td>
+    <td colspan="3">
+        <p>Endereço Residencial</p>
+        <input name="txtEndereço" id="txtEndereço" type="text" value="" style="height:30" size="103px"/>
+    </td>
+    <td colspan="1">
+        <p>Número</p>
+        <input name="txtNumero" id="txtNumero" type="text" value="" style="height:30" size="30px"/>
+    </td>
+</tr>
+
+<tr>
+        <td colspan="1" >
+            <p>Complemento</p>
+            <input name="txtComplemento" id="txtComplemento" type="text" value="" style="height:30" size="33px"/>
+        </td>
+        <td colspan="2">
+            <p>Bairro</p>
+            <input name="txtBairro" id="txtBairro" type="text" value="" style="height:30" size="67px"/>
+        </td>
+        <td colspan="1">
+            <p>Cidade</p>
+            <input name="txtCidade" id="txtCidade" type="text" value="" style="height:30" size="30px"/>
+        </td>
+        <td colspan="1">
+        <p>Estado</p>
+        <input name="txtEstado" id="txtEstado" type="text" value="" style="height:30" size="30px"/>
+        </td>
+    </tr>
+</table>
+
+<table width="1300">
+    <tr>
+        <td colspan="1" width="275px" >
+            <p>Tempo de Residência</p>
+            <input name="txtTResidencia" id="txtTResidencia" type="text" value="" style="height:30" size="35px"/>
+        </td>
+        <td colspan="1" width="275px">
+            <p>Tipo de Imóvel</p>
+            <input name="txtTipoImovel" id="txtTipoImovel" type="text" value="" style="height:30" size="35px"/>
+        </td>
+        <td colspan="1" width="375px">
+            <p>Tel. Contato (Fixo)</p>
+            <input name="txtTelFixo" id="txtTelFixo" type="text" value="" style="height:30" size="47px"/>
+        </td>
+        <td colspan="1" width="375px">
+            <p>Tel. Celular</p>
+            <input name="txtTelCelular" id="txtTelCelular" type="text" value="" style="height:30" size="45px"/>
+        </td>
+    </tr>
+</table>
+
+<table width="1300">
+    <tr>
+        <td colspan="3" width="600px">
+            <p>Estado Civil</p>
+            <input id="ckbSolteiro" type="checkbox" name="Solteiro" style="padding-left:50px;">
+            <label for="Solteiro">Solteiro(a)</label>
+            <espaco>
+            <input id="ckbCasado" type="checkbox" name="Casado" style="padding-left:50px;">
+            <label for="Casado">Casado(a)</label>
+            </espaco><espaco>
+            <input id="ckbDivorciado" type="checkbox" name="Divorciado">
+            <label for="Divorciado">Divorciado(a)</label>
+            </espaco><espaco>
+            <input id="ckbViuvo" type="checkbox" name="Viuvo">
+            <label for="Viuvo">Viúvo(a)</label>
+            </espaco><espaco>
+            <input id="ckbAmasiado" type="checkbox" name="Amasiado">
+            <label for="Amasiado">Amasiado(a)</label>
+            </espaco><espaco>
+            <input id="ckbSeparado" type="checkbox" name="Separado">
+            <label for="Separado">Separado(a)</label>
+            </espaco>
+        </td>
+        <td colspan="1">
+            <p>Cartão Adicional</p>
+            <input id="ckbCartaoAdicionalSim" type="checkbox" name="Sim">
+            <label for="Sim">Sim</label>
+            <input id="ckbCartaoAdicionalNao" type="checkbox" name="Não">
+            <label for="Não">Não</label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p>Nome Cônjuge</p>
+            <input name="txtNomeConjuge" id="txtNomeConjuge" type="text" value="" style="height:30" size="179px"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="1" width="400">
+            <p>CPF</p>
+            <input name="txtCPFConjuge" id="txtCPFConjuge" type="text" value="" style="height:30" size="62px"/>
+        </td>
+        <td colspan="1" width="300">
+            <p>RG</p>
+            <input name="txtRGConjuge" id="txtRGConjuge" type="text" value="" style="height:30" size="62px"/>
+        </td>
+        <td colspan="1" width="200">
+            <p>Órgão Emissor</p>
+            <input name="txtEmissorConjuge" id="txtEmissorConjuge" type="text" value="" style="height:30" size="23px"/>
+        </td>
+        <td colspan="1" width="200">
+            <p>Data de Nascimento</p>
+            <input name="txtNascimentoConjuge" id="txtNascimentoConjuge" type="text" value="" style="height:30" size="14px"/>
+        </td>
+</table>
+
+<h1 style="padding-left: 500px;">ENDEREÇO PARA CORRESPONDÊNCIA</h1>
+<table width="1300">
+    <tr>
+        <td colspan="1">
+            <p>CEP</p>
+            <input name="txtCEPCorrespondencia" id="txtCEPCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+        </td>
+        <td colspan="3">
+            <p>Endereço</p>
+            <input name="txtEndereçoCorrespondencia" id="txtEndereçoCorrespondencia" type="text" value="" style="height:30" size="104px" readonly="true"/>
+        </td>
+        <td colspan="1">
+            <p>Número</p>
+            <input name="txtNumeroCorrespondencia" id="txtNumeroCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="1">
+            <p>Complemento</p>
+            <input name="txtComplementoCorrespondencia" id="txtComplementoCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+        </td>
+        <td colspan="2">
+            <p>Bairro</p>
+            <input name="txtBairroCorrespondencia" id="txtBairroCorrespondencia" type="text" value="" style="height:30" size="68px" readonly="true"/>
+        </td>
+        <td colspan="1">
+            <p>Cidade</p>
+            <input name="txtCidadeCorrespondencia" id="txtCidadeCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+        </td>
+        <td colspan="1">
+            <p>Estado</p>
+            <input name="txtEstadoCorrespondencia" id="txtEstadoCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+        </td>
+    </tr>
+</table>
+
+<h1 style="padding-left: 580px;">DADOS PROFISSIONAIS</h1>
+<table width="1300">
+    <tr>
+        <td colspan="4">
+            <p>Empresa</p>
+            <input name="txtEmpresa" id="txtEmpresa" type="text" value="" style="height:30" size="179px"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="1" width="200">
+            <p>Cargo/Função</p>
+            <input name="txtCargo" id="txtCargo" type="text" value="" style="height:30" size="40px"/>
+        </td>
+        <td colspan="1" width="200">
+            <p>Tempo de Trabalho</p>
+            <input name="txtTTrabalho" id="txtTTrabalho" type="text" value="" style="height:30" size="40px"/>
+
+        </td>
+        <td colspan="1" width="400">
+            <p>Tel. Trabalho</p>
+            <input name="txtTelTrabalho" id="txtTelTrabalho" type="text" value="" style="height:30" size="40px"/>
+        </td>
+        <td colspan="1" width="500">
+            <p>Ramal</p>
+            <input name="txtRamal" id="txtRamal" type="text" value="" style="height:30" size="41px"/>
+        </td>
+    </tr>
+</table>
+
+<table width="1300">
+    <tr>
+        <td colspan = "4">
+            <p>Renda/Salário</p>
+            <input name="txtSalario" id="txtSalario" type="text" value="" style="height:30" size="67px"/>
+        </td>
+        <td colspan = "4">
+            <p>Outras Rendas</p>
+            <input name="txtOutrasRendas" id="txtOutrasRendas" type="text" value="" style="height:30" size="66px"/>
+        </td>
+        <td colspan = "2">
+            <p>CEP Empresa</p>
+            <input name="txtCEPEmpresa" id="txtCEPEmpresa" type="text" value="" style="height:30" size="33px"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan = "8">
+            <p>Endereço Empresa</p>
+            <input name="txtEndereçoEmpresa" id="txtEndereçoEmpresa" type="text" value="" style="height:30" size="140px"/>
+        </td>
+        <td colspan = "2">
+            <p>Número Empresa</p>
+            <input name="txtNumeroEmpresa" id="txtNumeroEmpresa" type="text" value="" style="height:30" size="33px"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan = "2">
+            <p>Complemento Empresa</p>
+            <input name="txtComplementoEmpresa" id="txtComplementoEmpresa" type="text" value="" style="height:30" size="67px"/>
+        </td>
+        <td colspan = "4">
+            <p>Bairro Empresa</p>
+            <input name="txtBairroEmpresa" id="txtBairroEmpresa" type="text" value="" style="height:30" size="30px"/>
+        </td>
+        <td colspan="2">
+            <p>Cidade Empresa</p>
+            <input name="txtCidadeEmpresa" id="txtCidadeEmpresa" type="text" value="" style="height:30" size="30px"/>
+        </td>
+        <td colspan="2">
+            <p>Estado Empresa</p>
+            <input name="txtEstadoEmpresa" id="txtEstadoEmpresa" type="text" value="" style="height:30" size="33px"/>
+        </td>
+    </tr>
+</table>
+<h1 style="padding-left: 460px; color: darkblue; background-color: lightblue; font-size: 14px;">Assinale a melhor opção de data para o vencimento da sua fatura</br></h1>
+    <div class="classeFundo"><espaco2><input style="background-color: lightblue;" id="ckbDia7" type="checkbox" name="Dia7">
+    <label for="Dia7">7</label>
+    </espaco2><espaco3>
+    <input id="ckbDia14" type="checkbox" name="Dia14">
+    <label for="Dia14">14</label>
+    </espaco3><espaco3>
+    <input id="ckbDia21" type="checkbox" name="Dia21">
+    <label for="Dia21">21</label>
+    </espaco3><espaco3>
+    <input style="background-color :lightblue blue;"id="ckbDia27" type="checkbox" name="Dia27">
+    <label for="Dia27">27</label>
+    </espaco3></div>
+</body>
+</html>
