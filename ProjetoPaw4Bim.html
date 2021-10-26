@@ -18,8 +18,9 @@ color: white;
 background-color : blue;
 padding-left: 580px;
 }
-.classeFundo{background-color: lightblue;
-}
+
+.classeFundo{background-color: lightblue;}
+.esconder{display:none}
 espaco{padding-left: 100px;}
 espaco2{padding-left:530px;}
 espaco3{padding-left: 50px;}
@@ -34,6 +35,11 @@ function evt_ckbMarcarDesmarcarCheckBoxEstadoCivil(id_checkbox){
             var checkbox = document.getElementById("ckbEstadoCivil"+cont);
             checkbox.checked = false;
         }
+    }
+    if(id_checkbox == "ckbEstadoCivil2"){
+        evt_ExpandirDadosPessoaisConjuge();
+    }else{
+        evt_RecolherDadosPessoaisConjuge();
     }
 }
 
@@ -50,6 +56,20 @@ function evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura(id_checkbox){
     }
 }
 
+function evt_ExpandirDadosPessoaisConjuge(){
+    for(var x = 1; x <= 5; x++){
+        textbox = document.getElementById("divEsconde"+x);
+        textbox.classList.remove("esconder")
+    }
+}
+
+function evt_RecolherDadosPessoaisConjuge(){
+    for(var x = 1; x <= 5; x++){
+        textbox = document.getElementById("divEsconde"+x);
+        textbox.classList.add("esconder")
+    }
+}
+
 </script>
 </head>
 
@@ -60,7 +80,7 @@ function evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura(id_checkbox){
 <tr>
     <td colspan="5">
         <p>Nome do Titular</p>
-        <input name="txtNome" id="txtNome" type="text" value="" size="179" style="height:30"/>
+        <input name="txtNome" id="txtNome" type="text" value="" size="179" style="height:30" style="display:none" value="Olá"/>
     </td>
 </tr>
 <tr>
@@ -185,27 +205,27 @@ function evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura(id_checkbox){
     </tr>
     <tr>
         <td colspan="4">
-            <p>Nome Cônjuge</p>
-            <input name="txtNomeConjuge" id="txtNomeConjuge" type="text" value="" style="height:30" size="179px"/>
+            <div class="esconder" id="divEsconde1"><p>Nome Cônjuge</p>
+            <input name="txtNomeConjuge" id="txtNomeConjuge" type="text" value="" style="height:30" size="179px"/></div>
         </td>
     </tr>
 
     <tr>
         <td colspan="1" width="400">
-            <p>CPF</p>
-            <input name="txtCPFConjuge" id="txtCPFConjuge" type="text" value="" style="height:30" size="62px"/>
+            <div class="esconder" id="divEsconde2"><p>CPF</p>
+            <input name="txtCPFConjuge" id="txtCPFConjuge" type="text" value="" style="height:30" size="62px"/></div>
         </td>
         <td colspan="1" width="300">
-            <p>RG</p>
-            <input name="txtRGConjuge" id="txtRGConjuge" type="text" value="" style="height:30" size="62px"/>
+            <div class="esconder" id="divEsconde3"><p>RG</p>
+            <input name="txtRGConjuge" id="txtRGConjuge" type="text" value="" style="height:30" size="62px"/></div>
         </td>
         <td colspan="1" width="200">
-            <p>Órgão Emissor</p>
-            <input name="txtEmissorConjuge" id="txtEmissorConjuge" type="text" value="" style="height:30" size="23px"/>
+            <div class="esconder" id="divEsconde4"><p>Órgão Emissor</p>
+            <input name="txtEmissorConjuge" id="txtEmissorConjuge" type="text" value="" style="height:30" size="23px"/></div>
         </td>
         <td colspan="1" width="200">
-            <p>Data de Nascimento</p>
-            <input name="txtNascimentoConjuge" id="txtNascimentoConjuge" type="text" value="" style="height:30" size="14px"/>
+            <div class="esconder" id="divEsconde5"><p>Data de Nascimento</p>
+            <input name="txtNascimentoConjuge" id="txtNascimentoConjuge" type="text" value="" style="height:30" size="14px"/></div>
         </td>
 </table>
 
