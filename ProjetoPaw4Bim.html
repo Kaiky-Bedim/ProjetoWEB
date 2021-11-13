@@ -43,6 +43,7 @@ font-size: 30px;
 espaco{padding-left: 100px;}
 espaco2{padding-left:530px;}
 espaco3{padding-left: 50px;}
+espacoListBox{padding-left: 350px;}
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -171,6 +172,7 @@ function evt_onBlurTextBoxes(id_textbox,id_p){
  p = document.getElementById(id_p);
  ParcelaInicial();
  VerificaSeEMulher();
+ EscreveEnderecoCorrespondencia();
  if(textbox.value == ""){
  textbox.classList.add("erroTextBox");
  p.classList.remove("erroMensagem");
@@ -247,6 +249,9 @@ matrizDados[pessoaCadastrada][2] = document.getElementById("txtDadosPessoais4").
 matrizDados[pessoaCadastrada][3] = idCheckboxPreenchida;
 matrizDados[pessoaCadastrada][4] = document.getElementById("txtTotalPagar").value;
 alert("Dados cadastrados com sucesso");
+EscreveCaixaDeLista();
+LimpaTextBoxes();
+LimpaCheckBoxes();
 }
 
 function TestaNome(idNome){
@@ -329,6 +334,55 @@ function TestaCEP(cep){
         alert("CEP de proporções inválidas");
         return true;
     }
+}
+
+function EscreveEnderecoCorrespondencia(){
+    for(var cont = 1; cont <= 7; cont++){
+        var cont2 = cont+7;
+        document.getElementById("txtDadoCorrespondencia"+cont).value = document.getElementById("txtDadosPessoais"+cont2).value;
+    }
+}
+
+function EscreveCaixaDeLista(){
+    var listBox = document.getElementById("lstDadosCadastrados");
+    listBox.classList.remove("erroMensagem");
+    var opt = document.createElement("option");
+    nome = matrizDados[pessoaCadastrada][0];
+    cpf = matrizDados[pessoaCadastrada][1];
+    rg = matrizDados[pessoaCadastrada][2];
+    estadoCivil = matrizDados[pessoaCadastrada][3];
+    totalPagar = matrizDados[pessoaCadastrada][4];
+    opt.text = "Nome: "+nome+" - CPF: "+cpf+" - RG: "+rg+" - Estado Civil: "+estadoCivil+" - Total a Pagar: "+totalPagar;
+    listBox.options.add(opt);
+}
+
+function LimpaTextBoxes(){
+for(var cont = 1; cont <= 17; cont++){
+    var textboxTeste = document.getElementById("txtDadosPessoais"+cont);
+    textboxTeste.value = "";
+}
+EscreveEnderecoCorrespondencia();
+for(var x = 1; x<= 5; x++){
+ document.getElementById("txtDadosConjuge"+x).value = "";
+ }
+}
+
+function LimpaCheckBoxes(){
+ for(var cont = 1; cont <=4; cont++){
+ document.getElementById("ckbDiaOpcao"+cont).checked = false
+}
+document.getElementById("ckbCartaoAdicional1").checked = false;
+document.getElementById("ckbCartaoAdicional2").checked = false;
+deuDesconto = false;
+for(var cont = 1; cont <= 6; cont++){
+    document.getElementById("ckbEstadoCivil"+cont).checked = false;
+}
+evt_RecolherDadosPessoaisConjuge()
+Casado = false;
+somouCartaoAdcional = false;
+somouParcelaInicial = false;
+document.getElementById("txtTotalPagar").value = "R$ 0.00";
+document.getElementById("txtTelFixo").value = "";
 }
 
 </script>
@@ -506,12 +560,12 @@ function TestaCEP(cep){
  <p class="erroMensagem" id="mensagemErro22" style="color:red;">*Este campo é obrigatório</p></div>
  </td>
  <td colspan="1" width="200">
- <div class="esconder" id="divEsconde4"><p>Órgão Emissor</p>
+ <div class="esconder" id="divEsconde4"><p>Órgão Emissor Cônjuge</p>
  <input name="txtDadosConjuge4" id="txtDadosConjuge4" type="text" value="" style="height:30" size="23px" onblur='evt_onBlurTextBoxes("txtDadosConjuge4","mensagemErro23")'/>
  <p class="erroMensagem" id="mensagemErro23" style="color:red;">*Este campo é obrigatório</p></div>
  </td>
  <td colspan="1" width="200">
- <div class="esconder" id="divEsconde5"><p>Data de Nascimento Cônjuge</p>
+ <div class="esconder" id="divEsconde5"><p>Data de Nascimento</p>
  <input name="txtDadosConjuge5" id="txtDadosConjuge5" type="text" value="" style="height:30" size="14px" onblur='evt_onBlurTextBoxes("txtDadosConjuge5","mensagemErro24")'/>
  <p class="erroMensagem" id="mensagemErro24" style="color:red;">*Este campo é obrigatório</p></div>
  </td>
@@ -522,33 +576,33 @@ function TestaCEP(cep){
  <tr>
  <td colspan="1">
  <p>CEP</p>
- <input name="txtCEPCorrespondencia" id="txtCEPCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+ <input name="txtCEPCorrespondencia" id="txtDadoCorrespondencia1" type="text" value="" style="height:30" size="33px" readonly="true"/>
  </td>
  <td colspan="3">
  <p>Endereço</p>
- <input name="txtEndereçoCorrespondencia" id="txtEndereçoCorrespondencia" type="text" value="" style="height:30" size="104px" readonly="true"/>
+ <input name="txtEndereçoCorrespondencia" id="txtDadoCorrespondencia2" type="text" value="" style="height:30" size="104px" readonly="true"/>
  </td>
  <td colspan="1">
  <p>Número</p>
- <input name="txtNumeroCorrespondencia" id="txtNumeroCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ <input name="txtNumeroCorrespondencia" id="txtDadoCorrespondencia3" type="text" value="" style="height:30" size="30px" readonly="true"/>
  </td>
  </tr>
  <tr>
  <td colspan="1">
  <p>Complemento</p>
- <input name="txtComplementoCorrespondencia" id="txtComplementoCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+ <input name="txtComplementoCorrespondencia" id="txtDadoCorrespondencia4" type="text" value="" style="height:30" size="33px" readonly="true"/>
  </td>
  <td colspan="2">
  <p>Bairro</p>
- <input name="txtBairroCorrespondencia" id="txtBairroCorrespondencia" type="text" value="" style="height:30" size="68px" readonly="true"/>
+ <input name="txtBairroCorrespondencia" id="txtDadoCorrespondencia5" type="text" value="" style="height:30" size="68px" readonly="true"/>
  </td>
  <td colspan="1">
  <p>Cidade</p>
- <input name="txtCidadeCorrespondencia" id="txtCidadeCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ <input name="txtCidadeCorrespondencia" id="txtDadoCorrespondencia6" type="text" value="" style="height:30" size="30px" readonly="true"/>
  </td>
  <td colspan="1">
  <p>Estado</p>
- <input name="txtEstadoCorrespondencia" id="txtEstadoCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ <input name="txtEstadoCorrespondencia" id="txtDadoCorrespondencia7" type="text" value="" style="height:30" size="30px" readonly="true"/>
  </td>
  </tr>
 </table>
@@ -646,6 +700,11 @@ function TestaCEP(cep){
  <input id="txtTotalPagar" name="txtTotalPagar" type="text" value="R$ 0.00" readonly="true" class="totalPagarClass" size="5">
 </br>
 </br>
+</br>
+</br>
+</br>
+<espacoListBox><select id="lstDadosCadastrados" name="lstDadosCadastrados" size="10" class="erroMensagem"></espacoListBox>
+</select>
 </br>
 </br>
 </br>
