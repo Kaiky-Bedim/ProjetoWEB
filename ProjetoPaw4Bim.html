@@ -4,13 +4,13 @@
 
 <style type="text/css">
 p{ font-family: Arial;
-    font-size: 12px;
-    color: blue;
+ font-size: 12px;
+ color: blue;
 }
 label {
-    font-family: Arial;
-    font-size: 12px;
-    color: blue;
+ font-family: Arial;
+ font-size: 12px;
+ color: blue;
 }
 h1{ font-family: Arial;
 font-size: 20px;
@@ -47,136 +47,286 @@ espaco3{padding-left: 50px;}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <script type="text/javascript">
-    
+ var somouCartaoAdcional = false;
+ var somouParcelaInicial = false;
+ var deuDesconto = false;
+ var matrizDados = Array([999],[999]);
+ var pessoaCadastrada = 0;
+ var Casado = false;
+ 
 function evt_ckbMarcarDesmarcarCheckBoxEstadoCivil(id_checkbox){
-    evt_OnBlurCheckBoxes(6, "divCheckBoxEstadoCivil", "mensagemErro18", "ckbEstadoCivil");
-    for(var cont = 1; cont <= 6; cont++){
-        if("ckbEstadoCivil"+cont != id_checkbox){
-            var checkbox = document.getElementById("ckbEstadoCivil"+cont);
-            checkbox.checked = false;
-        }
-    }
-    if(document.getElementById("ckbEstadoCivil2").checked == true){
-        evt_ExpandirDadosPessoaisConjuge();
-    }else{
-        evt_RecolherDadosPessoaisConjuge();
-    }
+ evt_OnBlurCheckBoxes(6, "divCheckBoxEstadoCivil", "mensagemErro18", "ckbEstadoCivil");
+ for(var cont = 1; cont <= 6; cont++){
+ if("ckbEstadoCivil"+cont != id_checkbox){
+ var checkbox = document.getElementById("ckbEstadoCivil"+cont);
+ checkbox.checked = false;
+ }
+ }
+ if(document.getElementById("ckbEstadoCivil2").checked == true){
+ evt_ExpandirDadosPessoaisConjuge();
+ sexo = document.getElementById("txtDadosPessoais7").value.toUpperCase();
+ Casado = true;
+ }
+ else{
+ evt_RecolherDadosPessoaisConjuge();
+ Casado = false;
+ }
+ VerificaSeEMulher();
 }
 
 function evt_OnBlurCheckBoxes(limite,id_div,id_p,id_ckb){
-    var contadorCheckBoxesVazias = 0;
-    for(var cont = 1; cont <= limite; cont++){
-        var checkbox = document.getElementById(id_ckb+cont);
-        if( checkbox.checked == false){
-            contadorCheckBoxesVazias++;
-        }
-    }
-    if(contadorCheckBoxesVazias == limite){
-        document.getElementById(id_div).classList.add("erroTextBox");
-        document.getElementById(id_p).classList.remove("erroMensagem");
-        return;
-    }
-    document.getElementById(id_div).classList.remove("erroTextBox");
-    document.getElementById(id_p).classList.add("erroMensagem");
+ var contadorCheckBoxesVazias = 0;
+ for(var cont = 1; cont <= limite; cont++){
+ var checkbox = document.getElementById(id_ckb+cont);
+ if( checkbox.checked == false){
+ contadorCheckBoxesVazias++;
+ }
+ }
+ if(contadorCheckBoxesVazias == limite){
+ document.getElementById(id_div).classList.add("erroTextBox");
+ document.getElementById(id_p).classList.remove("erroMensagem");
+ return;
+ }
+ document.getElementById(id_div).classList.remove("erroTextBox");
+ document.getElementById(id_p).classList.add("erroMensagem");
 }
 
-function evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional(id_checkbox){
-    document.getElementById(id_checkbox).checked = false;
-    evt_OnBlurCheckBoxes(2, "divCartaoAdicional", "mensagemErro19", "ckbCartaoAdicional");
+function evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional(id_checkboxDesmarcar, id_checkboxMarcar){
+ var totalPagar = document.getElementById("txtTotalPagar");
+ var tamanho = totalPagar.value.length;
+ var valor = totalPagar.value.slice(3, tamanho);
+ if(id_checkboxMarcar == "ckbCartaoAdicional1" && document.getElementById(id_checkboxMarcar).checked == true){
+ if(confirm("Deseja pagar mais R$ 87.90 pelo cartão adicional ?")){
+ if(valor == "0.00"){
+ valor = 0.0;
+ }
+ if(deuDesconto == true){
+    totalPagar.value = "R$ "+(parseFloat(valor)+43.95).toFixed(2);     
+ }else{
+    totalPagar.value = "R$ "+(parseFloat(valor)+87.90).toFixed(2); 
+ }
+ evt_OnBlurCheckBoxes(2, "divCartaoAdicional", "mensagemErro19", "ckbCartaoAdicional");
+ document.getElementById(id_checkboxDesmarcar).checked = false;
+ somouCartaoAdcional = true;
+ return;
+ }else{
+ document.getElementById(id_checkboxMarcar).checked = false;
+ return;
+ }
+ }
+ if(id_checkboxMarcar == "ckbCartaoAdicional1" && document.getElementById(id_checkboxMarcar).checked == false){
+ if(valor == "0.00"){
+ valor = 0.0;
+ }
+ if(deuDesconto == true && somouCartaoAdcional == true){
+    totalPagar.value = "R$ "+(parseFloat(valor-43.95)).toFixed(2); 
+    document.getElementById(id_checkboxDesmarcar).checked = false;   
+    somouCartaoAdcional = false;
+    return;
+ }
+ }
+ if(somouCartaoAdcional == true){
+ totalPagar.value = "R$ "+(parseFloat(valor-87.90)).toFixed(2); 
+ document.getElementById(id_checkboxDesmarcar).checked = false;
+ evt_OnBlurCheckBoxes(2, "divCartaoAdicional", "mensagemErro19", "ckbCartaoAdicional"); 
+ somouCartaoAdcional = false;
+ return;
+ }
+ document.getElementById(id_checkboxDesmarcar).checked = false;
+ evt_OnBlurCheckBoxes(2, "divCartaoAdicional", "mensagemErro19", "ckbCartaoAdicional");
 }
 
 function evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura(id_checkbox){
-    evt_OnBlurCheckBoxes(4, "divVencimentoDaFatura", "mensagemErro25", "ckbDiaOpcao")
-    for(var cont = 1; cont <= 4; cont++){
-        if("ckbDiaOpcao"+cont != id_checkbox){
-            var checkbox = document.getElementById("ckbDiaOpcao"+cont);
-            checkbox.checked = false;
-        }
-    }
+ evt_OnBlurCheckBoxes(4, "divVencimentoDaFatura", "mensagemErro25", "ckbDiaOpcao")
+ for(var cont = 1; cont <= 4; cont++){
+ if("ckbDiaOpcao"+cont != id_checkbox){
+ var checkbox = document.getElementById("ckbDiaOpcao"+cont);
+ checkbox.checked = false;
+ }
+ }
 }
 
 function evt_ExpandirDadosPessoaisConjuge(){
-    for(var x = 1; x <= 5; x++){
-        textbox = document.getElementById("divEsconde"+x);
-        textbox.classList.remove("esconder")
-    }
+ for(var x = 1; x <= 5; x++){
+ textbox = document.getElementById("divEsconde"+x);
+ textbox.classList.remove("esconder")
+ }
 }
 
 function evt_RecolherDadosPessoaisConjuge(){
-    for(var x = 1; x <= 5; x++){
-        textbox = document.getElementById("divEsconde"+x);
-        textbox.classList.add("esconder")
-    }
-    for(var x = 20; x <= 24; x++){
-            document.getElementById("mensagemErro"+x).classList.add("erroMensagem");
-    }
-    for(var x = 1; x<= 5; x++){
-        document.getElementById("txtDadosConjuge"+x).classList.remove("erroTextBox");
-    }
+ for(var x = 1; x <= 5; x++){
+ textbox = document.getElementById("divEsconde"+x);
+ textbox.classList.add("esconder")
+ }
+ for(var x = 20; x <= 24; x++){
+ document.getElementById("mensagemErro"+x).classList.add("erroMensagem");
+ }
+ for(var x = 1; x<= 5; x++){
+ document.getElementById("txtDadosConjuge"+x).classList.remove("erroTextBox");
+ }
 }
 
 function evt_onBlurTextBoxes(id_textbox,id_p){
-    textbox = document.getElementById(id_textbox);
-    p = document.getElementById(id_p);
-    if(textbox.value == ""){
-        textbox.classList.add("erroTextBox");
-        p.classList.remove("erroMensagem");
-    }else{
-        textbox.classList.remove("erroTextBox");
-        p.classList.add("erroMensagem");
-    }
+ textbox = document.getElementById(id_textbox);
+ p = document.getElementById(id_p);
+ ParcelaInicial();
+ VerificaSeEMulher();
+ if(textbox.value == ""){
+ textbox.classList.add("erroTextBox");
+ p.classList.remove("erroMensagem");
+ return;
+ }else{
+ textbox.classList.remove("erroTextBox");
+ p.classList.add("erroMensagem");
+ }
 }
 
 function evt_onClickButton(){
-    for(var cont = 1; cont<= 17; cont++){
-        var textbox = document.getElementById("txtDadosPessoais"+cont);
-        if(textbox.value == ""){
-            alert("É necessário preencher todos os dados obrigatórios para efeturar registro");
-            return;
-        }   
-    }
-    if(TestaNome()){
+ for(var cont = 1; cont<= 17; cont++){
+ var textbox = document.getElementById("txtDadosPessoais"+cont);
+ if(textbox.value == ""){
+ alert("É necessário preencher todos os dados obrigatórios para efetuar registro");
+ return;
+ } 
+ }
+ var contadorCheckBoxesVazias = 0;
+ for(var cont = 1; cont <= 6; cont++){
+ var checkbox = document.getElementById("ckbEstadoCivil"+cont);
+ if(checkbox.checked == false){
+ contadorCheckBoxesVazias++;
+ }else{
+     var idCheckboxPreenchida = checkbox.name;
+ }
+ }
+ if(contadorCheckBoxesVazias == 6){
+ alert("É necessário preencher todos os dados obrigatórios para efetuar registro");
+ return; 
+ }
+ if(document.getElementById("ckbEstadoCivil2").checked == true){
+ for(var cont = 1; cont <= 5; cont++){
+ if(document.getElementById("txtDadosConjuge" + cont).value == ""){
+ alert("É necessário preencher todos os dados obrigatórios para efetuar registro");
+ return; 
+ }
+ }
+ }
+ if(document.getElementById("ckbCartaoAdicional1").checked == false && document.getElementById("ckbCartaoAdicional2").checked == false){
+ alert("É necessário preencher todos os dados obrigatórios para efetuar registro");
+ return;
+ }
+ contadorCheckBoxesVazias = 0;
+ for(var cont = 1; cont <=4; cont++){
+ if(document.getElementById("ckbDiaOpcao"+cont).checked == false){
+ contadorCheckBoxesVazias++;
+ }
+ }
+ if(contadorCheckBoxesVazias == 4){
+ alert("É necessário preencher todos os dados obrigatórios para efetuar registro");
+ return;
+ }
+ if(ValidaSexo(document.getElementById("txtDadosPessoais7").value)){
+ return;
+ }
+ if(TestaNome("txtDadosPessoais1")){
+    alert("Nome inválido, um nome válido possui mais de 5 caracteres !");
+    return;
+ }
+ if(TestaNome("txtDadosConjuge1") && Casado == true){
+    alert("Nome do cônjuge inválido, um nome válido possui mais de 5 caracteres !");
+    return;
+} 
+ if(TestaCPF(document.getElementById("txtDadosPessoais3").value)){
+     return;
+ }
+ if(TestaCEP(document.getElementById("txtDadosPessoais8").value)){
+     return;
+ }
+matrizDados[pessoaCadastrada][0] = document.getElementById("txtDadosPessoais1").value;
+matrizDados[pessoaCadastrada][1] = document.getElementById("txtDadosPessoais3").value;
+matrizDados[pessoaCadastrada][2] = document.getElementById("txtDadosPessoais4").value;
+matrizDados[pessoaCadastrada][3] = idCheckboxPreenchida;
+matrizDados[pessoaCadastrada][4] = document.getElementById("txtTotalPagar").value;
+alert("Dados cadastrados com sucesso");
+}
+
+function TestaNome(idNome){
+ var textboxNome = document.getElementById(idNome).value;
+ if(textboxNome.length <= 5){
+    return true;
+ }
+}
+
+function ValidaSexo(sexo){
+ sexo = sexo.toUpperCase();
+ if(sexo == "MASCULINO" || sexo == "HOMEM" || sexo == "M" || sexo == "FEMININO" || sexo == "MULHER" || sexo == "F"){
+ return false
+ }
+ alert("Sexo inválido, tente novamente");
+ return true;
+}
+
+function VerificaSeEMulher(){
+ var sexo = document.getElementById("txtDadosPessoais7").value.toUpperCase();
+ var totalPagar = document.getElementById("txtTotalPagar");
+ var tamanho = totalPagar.value.length;
+ var valor = totalPagar.value.slice(3, tamanho);
+ if((sexo == "FEMININO" || sexo == "F" || sexo == "MULHER") && document.getElementById("ckbEstadoCivil2").checked == true){
+     if(deuDesconto == false){
+        totalPagar.value = "R$ "+parseFloat(valor/2).toFixed(2); 
+        deuDesconto = true;
         return;
+     }
+     return;
+ }
+ if(deuDesconto == true){
+    totalPagar.value = "R$ "+parseFloat(valor*2).toFixed(2);
+    deuDesconto = false;
+ }
+}
+
+function ParcelaInicial(){
+ var totalPagar = document.getElementById("txtTotalPagar");
+ var tamanho = totalPagar.value.length;
+ var valor = totalPagar.value.slice(3, tamanho);
+ var contadorTextBoxesVazias = 0;
+ for(var cont = 1; cont <= 17; cont++){
+ var textboxTeste = document.getElementById("txtDadosPessoais"+cont);
+ if(textboxTeste.value != ""){
+ if(somouParcelaInicial == false){
+ if(valor == "0.00"){
+ valor = 0.0;
+ }
+ totalPagar.value = "R$ "+parseFloat(valor+579.70).toFixed(2);
+ somouParcelaInicial = true;
+ VerificaSeEMulher();
+ return;
+ }
+ }else{
+ contadorTextBoxesVazias++;
+ }
+ }
+ if(contadorTextBoxesVazias == 17 && somouParcelaInicial == true){
+ totalPagar.value = "R$ "+parseFloat(valor-579.70).toFixed(2);
+ somouParcelaInicial = false;
+ }
+} 
+
+function TestaCPF(cpf){
+    if(cpf.length != 11){
+        alert("CPF de proporções inválidas");
+        return true;
     }
-    var contadorCheckBoxesVazias = 0;
-    for(var cont = 1; cont <= 6; cont++){
-        var checkbox = document.getElementById("ckbEstadoCivil"+cont);
-        if(checkbox.checked == false){
-            contadorCheckBoxesVazias++;
+    for(var cont = 0; cont < 999; cont++){
+        if(cpf == matrizDados[0][cont]){
+            alert("Este CPF já foi cadastrado");
+            return true;
         }
-    }
-    if(contadorCheckBoxesVazias == 6){
-        alert("É necessário preencher todos os dados obrigatórios para efeturar registro");
-        return; 
-    }
-    if(document.getElementById("ckbEstadoCivil2").checked == true){
-        for(var cont = 1; cont <= 5; cont++){
-            if(document.getElementById("txtDadosConjuge" + cont).value == ""){
-                 alert("É necessário preencher todos os dados obrigatórios para efeturar registro");
-                 return; 
-            }
-        }
-    }
-    if(document.getElementById("ckbCartaoAdicional1").checked == false && document.getElementById("ckbCartaoAdicional2").checked == false){
-        alert("É necessário preencher todos os dados obrigatórios para efeturar registro");
-        return;
-    }
-    contadorCheckBoxesVazias = 0;
-    for(var cont = 1; cont <=4; cont++){
-        if(document.getElementById("ckbDiaOpcao"+cont).checked == false){
-            contadorCheckBoxesVazias++;
-        }
-    }
-    if(contadorCheckBoxesVazias == 4){
-        alert("É necessário preencher todos os dados obrigatórios para efeturar registro");
-        return;
     }
 }
 
-function TestaNome(){
-    var textboxNome = document.getElementById("txtDadosPessoais1").value;
-    if(textboxNome.length <= 5 ){
-        alert("Nome inválido, um nome válido possui mais de 5 caracteres !");
+function TestaCEP(cep){
+    if(cep.length != 8){
+        alert("CEP de proporções inválidas");
         return true;
     }
 }
@@ -185,316 +335,315 @@ function TestaNome(){
 </head>
 
 <body>
-
 <h1>DADOS PESSOAIS</h1>
 <table width="1300">
 <tr>
-    <td colspan="5">
-        <p>Nome do Titular</p>
-        <input name="txtNome" id="txtDadosPessoais1" type="text" value="" size="179" style="height:30" style="display:none" onblur='evt_onBlurTextBoxes("txtDadosPessoais1","mensagemErro1")'/>
-        <p class="erroMensagem" id="mensagemErro1" style="color:red;">*Este campo é obrigatório</p>
-    </td>
+ <td colspan="5">
+ <p>Nome do Titular</p>
+ <input name="txtNome" id="txtDadosPessoais1" type="text" value="" size="179" style="height:30" style="display:none" onblur='evt_onBlurTextBoxes("txtDadosPessoais1","mensagemErro1")'/>
+ <p class="erroMensagem" id="mensagemErro1" style="color:red;">*Este campo é obrigatório</p>
+ </td>
 </tr>
 <tr>
-    <td colspan="5">
-        <p>Filiação</p>
-        <input name="txtFiliacao" id="txtDadosPessoais2" type="text" value="" size="179" style="height:30" onblur='evt_onBlurTextBoxes("txtDadosPessoais2","mensagemErro2")'/>
-        <p class="erroMensagem" id="mensagemErro2" style="color:red;">*Este campo é obrigatório</p>
-    </td>
+ <td colspan="5">
+ <p>Filiação</p>
+ <input name="txtFiliacao" id="txtDadosPessoais2" type="text" value="" size="179" style="height:30" onblur='evt_onBlurTextBoxes("txtDadosPessoais2","mensagemErro2")'/>
+ <p class="erroMensagem" id="mensagemErro2" style="color:red;">*Este campo é obrigatório</p>
+ </td>
 </tr>
 </table>
 
 <table width="1300">
 <tr>
-    <td colspan="1" width="400">
-        <p>CPF</p>
-               <input name="txtCPF" id="txtDadosPessoais3" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais3","mensagemErro3")'/>
-               <p class="erroMensagem" id="mensagemErro3" style="color:red;">*Este campo é obrigatório</p>
-    </td>
-    <td colspan="1" width="300">
-        <p>RG</p>
-        <input name="txtRG" id="txtDadosPessoais4" type="text" value="" style="height:30" size="31px" onblur='evt_onBlurTextBoxes("txtDadosPessoais4","mensagemErro4")'/>
-        <p class="erroMensagem" id="mensagemErro4" style="color:red;">*Este campo é obrigatório</p>
+ <td colspan="1" width="400">
+ <p>CPF</p>
+ <input name="txtCPF" id="txtDadosPessoais3" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais3","mensagemErro3")'/>
+ <p class="erroMensagem" id="mensagemErro3" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1" width="300">
+ <p>RG</p>
+ <input name="txtRG" id="txtDadosPessoais4" type="text" value="" style="height:30" size="31px" onblur='evt_onBlurTextBoxes("txtDadosPessoais4","mensagemErro4")'/>
+ <p class="erroMensagem" id="mensagemErro4" style="color:red;">*Este campo é obrigatório</p>
 
-    </td>
-    <td colspan="1" width="200">
-        <p>Órgão Emissor</p>
-        <input name="txtEmissor" id="txtDadosPessoais5" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais5","mensagemErro5")'/>
-        <p class="erroMensagem" id="mensagemErro5" style="color:red;">*Este campo é obrigatório</p>
-    </td>
-    <td colspan="1" width="200">
-        <p>Data de Nascimento</p>
-        <input name="txtNascimento" id="txtDadosPessoais6" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais6","mensagemErro6")'/>
-        <p class="erroMensagem" id="mensagemErro6" style="color:red;">*Este campo é obrigatório</p>
-    </td>
-    <td colspan="1" width="200">
-        <p>Sexo</p>
-        <input name="txtSexo" id="txtDadosPessoais7" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais7","mensagemErro7")'/>
-        <p class="erroMensagem" id="mensagemErro7" style="color:red;">*Este campo é obrigatório</p>
-    </td> 
+ </td>
+ <td colspan="1" width="200">
+ <p>Órgão Emissor</p>
+ <input name="txtEmissor" id="txtDadosPessoais5" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais5","mensagemErro5")'/>
+ <p class="erroMensagem" id="mensagemErro5" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1" width="200">
+ <p>Data de Nascimento</p>
+ <input name="txtNascimento" id="txtDadosPessoais6" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais6","mensagemErro6")'/>
+ <p class="erroMensagem" id="mensagemErro6" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1" width="200">
+ <p>Sexo</p>
+ <input name="txtSexo" id="txtDadosPessoais7" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais7","mensagemErro7")'/>
+ <p class="erroMensagem" id="mensagemErro7" style="color:red;">*Este campo é obrigatório</p>
+ </td> 
 </tr>
 
 <tr>
-    <td colspan="1" >
-        <p>CEP</p>
-        <input name="txtCEP" id="txtDadosPessoais8" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais8","mensagemErro8")'/>
-        <p class="erroMensagem" id="mensagemErro8" style="color:red;">*Este campo é obrigatório</p>
-    </td>
-    <td colspan="3">
-        <p>Endereço Residencial</p>
-        <input name="txtEndereço" id="txtDadosPessoais9" type="text" value="" style="height:30" size="103px" onblur='evt_onBlurTextBoxes("txtDadosPessoais9","mensagemErro9")'/>
-        <p class="erroMensagem" id="mensagemErro9" style="color:red;">*Este campo é obrigatório</p>
-    </td>
-    <td colspan="1">
-        <p>Número</p>
-        <input name="txtNumero" id="txtDadosPessoais10" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais10","mensagemErro10")'/>
-        <p class="erroMensagem" id="mensagemErro10" style="color:red;">*Este campo é obrigatório</p>
-    </td>
+ <td colspan="1" >
+ <p>CEP</p>
+ <input name="txtCEP" id="txtDadosPessoais8" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais8","mensagemErro8")'/>
+ <p class="erroMensagem" id="mensagemErro8" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="3">
+ <p>Endereço Residencial</p>
+ <input name="txtEndereço" id="txtDadosPessoais9" type="text" value="" style="height:30" size="103px" onblur='evt_onBlurTextBoxes("txtDadosPessoais9","mensagemErro9")'/>
+ <p class="erroMensagem" id="mensagemErro9" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1">
+ <p>Número</p>
+ <input name="txtNumero" id="txtDadosPessoais10" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais10","mensagemErro10")'/>
+ <p class="erroMensagem" id="mensagemErro10" style="color:red;">*Este campo é obrigatório</p>
+ </td>
 </tr>
 
 <tr>
-        <td colspan="1" >
-            <p>Complemento</p>
-            <input name="txtComplemento" id="txtDadosPessoais11" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais11","mensagemErro11")'/>
-            <p class="erroMensagem" id="mensagemErro11" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="2">
-            <p>Bairro</p>
-            <input name="txtBairro" id="txtDadosPessoais12" type="text" value="" style="height:30" size="67px" onblur='evt_onBlurTextBoxes("txtDadosPessoais12","mensagemErro12")'/>
-            <p class="erroMensagem" id="mensagemErro12" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="1">
-            <p>Cidade</p>
-            <input name="txtCidade" id="txtDadosPessoais13" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais13","mensagemErro13")'/>
-            <p class="erroMensagem" id="mensagemErro13" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="1">
-        <p>Estado</p>
-        <input name="txtEstado" id="txtDadosPessoais14" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais14","mensagemErro14")'/>
-        <p class="erroMensagem" id="mensagemErro14" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-    </tr>
+ <td colspan="1" >
+ <p>Complemento</p>
+ <input name="txtComplemento" id="txtDadosPessoais11" type="text" value="" style="height:30" size="33px" onblur='evt_onBlurTextBoxes("txtDadosPessoais11","mensagemErro11")'/>
+ <p class="erroMensagem" id="mensagemErro11" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="2">
+ <p>Bairro</p>
+ <input name="txtBairro" id="txtDadosPessoais12" type="text" value="" style="height:30" size="67px" onblur='evt_onBlurTextBoxes("txtDadosPessoais12","mensagemErro12")'/>
+ <p class="erroMensagem" id="mensagemErro12" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1">
+ <p>Cidade</p>
+ <input name="txtCidade" id="txtDadosPessoais13" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais13","mensagemErro13")'/>
+ <p class="erroMensagem" id="mensagemErro13" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1">
+ <p>Estado</p>
+ <input name="txtEstado" id="txtDadosPessoais14" type="text" value="" style="height:30" size="30px" onblur='evt_onBlurTextBoxes("txtDadosPessoais14","mensagemErro14")'/>
+ <p class="erroMensagem" id="mensagemErro14" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ </tr>
 </table>
 
 <table width="1300">
-    <tr>
-        <td colspan="1" width="275px" >
-            <p>Tempo de Residência</p>
-            <input name="txtTResidencia" id="txtDadosPessoais15" type="text" value="" style="height:30" size="35px" onblur='evt_onBlurTextBoxes("txtDadosPessoais15","mensagemErro15")'/>
-            <p class="erroMensagem" id="mensagemErro15" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="1" width="275px">
-            <p>Tipo de Imóvel</p>
-            <input name="txtTipoImovel" id="txtDadosPessoais16" type="text" value="" style="height:30" size="35px" onblur='evt_onBlurTextBoxes("txtDadosPessoais16","mensagemErro16")'/>
-            <p class="erroMensagem" id="mensagemErro16" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="1" width="375px">
-            <p>Tel. Contato (Fixo)</p>
-            <input name="txtTelFixo" id="txtTelFixo" type="text" value="" style="height:30" size="47px"/>
-        </td>
-        <td colspan="1" width="375px">
-            <p>Tel. Celular</p>
-            <input name="txtTelCelular" id="txtDadosPessoais17" type="text" value="" style="height:30" size="45px" onblur='evt_onBlurTextBoxes("txtDadosPessoais17","mensagemErro17")'/>
-            <p class="erroMensagem" id="mensagemErro17" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-    </tr>
+ <tr>
+ <td colspan="1" width="275px" >
+ <p>Tempo de Residência</p>
+ <input name="txtTResidencia" id="txtDadosPessoais15" type="text" value="" style="height:30" size="35px" onblur='evt_onBlurTextBoxes("txtDadosPessoais15","mensagemErro15")'/>
+ <p class="erroMensagem" id="mensagemErro15" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1" width="275px">
+ <p>Tipo de Imóvel</p>
+ <input name="txtTipoImovel" id="txtDadosPessoais16" type="text" value="" style="height:30" size="35px" onblur='evt_onBlurTextBoxes("txtDadosPessoais16","mensagemErro16")'/>
+ <p class="erroMensagem" id="mensagemErro16" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1" width="375px">
+ <p>Tel. Contato (Fixo)</p>
+ <input name="txtTelFixo" id="txtTelFixo" type="text" value="" style="height:30" size="47px"/>
+ </td>
+ <td colspan="1" width="375px">
+ <p>Tel. Celular</p>
+ <input name="txtTelCelular" id="txtDadosPessoais17" type="text" value="" style="height:30" size="45px" onblur='evt_onBlurTextBoxes("txtDadosPessoais17","mensagemErro17")'/>
+ <p class="erroMensagem" id="mensagemErro17" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ </tr>
 </table>
 
 <table width="1300">
-    <tr>
-        <td colspan="3" width="600px">
-            <p>Estado Civil</p>
-            <div name="divCheckBoxEstadoCivil" id="divCheckBoxEstadoCivil">
-            <input id="ckbEstadoCivil1" type="checkbox" name="Solteiro" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil1")'>
-            <label for="Solteiro">Solteiro(a)</label>
-            <espaco>
-            <input id="ckbEstadoCivil2" type="checkbox" name="Casado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil2")'>
-            <label for="Casado">Casado(a)</label>
-            </espaco><espaco>
-            <input id="ckbEstadoCivil3" type="checkbox" name="Divorciado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil3")'>
-            <label for="Divorciado">Divorciado(a)</label>
-            </espaco><espaco>
-            <input id="ckbEstadoCivil4" type="checkbox" name="Viuvo" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil4")'>
-            <label for="Viuvo">Viúvo(a)</label>
-            </espaco><espaco>
-            <input id="ckbEstadoCivil5" type="checkbox" name="Amasiado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil5")'>
-            <label for="Amasiado">Amasiado(a)</label>
-            </espaco><espaco>
-            <input id="ckbEstadoCivil6" type="checkbox" name="Separado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil6")'>
-            <label for="Separado">Separado(a)</label>
-            </espaco>
-            </div>
-            <p class="erroMensagem" id="mensagemErro18" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-        <td colspan="1">
-            <p>Cartão Adicional</p>
-            <div id="divCartaoAdicional">
-            <input id="ckbCartaoAdicional1" type="checkbox" name="Sim" onclick='evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional("ckbCartaoAdicional2")'>
-            <label for="Sim">Sim</label>
-            <input id="ckbCartaoAdicional2" type="checkbox" name="Não" onclick='evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional("ckbCartaoAdicional1")'>
-            <label for="Não">Não</label>
-            </div>
-            <p class="erroMensagem" id="mensagemErro19" style="color:red;">*Este campo é obrigatório</p>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <div class="esconder" id="divEsconde1"><p>Nome Cônjuge</p>
-            <input name="txtDadosConjuge1" id="txtDadosConjuge1" type="text" value="" style="height:30" size="179px" onblur='evt_onBlurTextBoxes("txtDadosConjuge1","mensagemErro20")'/>
-            <p class="erroMensagem" id="mensagemErro20" style="color:red;">*Este campo é obrigatório</p></div>
-        </td>
-    </tr>
+ <tr>
+ <td colspan="3" width="600px">
+ <p>Estado Civil</p>
+ <div name="divCheckBoxEstadoCivil" id="divCheckBoxEstadoCivil">
+ <input id="ckbEstadoCivil1" type="checkbox" name="Solteiro" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil1")'>
+ <label for="Solteiro">Solteiro(a)</label>
+ <espaco>
+ <input id="ckbEstadoCivil2" type="checkbox" name="Casado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil2")'>
+ <label for="Casado">Casado(a)</label>
+ </espaco><espaco>
+ <input id="ckbEstadoCivil3" type="checkbox" name="Divorciado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil3")'>
+ <label for="Divorciado">Divorciado(a)</label>
+ </espaco><espaco>
+ <input id="ckbEstadoCivil4" type="checkbox" name="Viuvo" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil4")'>
+ <label for="Viuvo">Viúvo(a)</label>
+ </espaco><espaco>
+ <input id="ckbEstadoCivil5" type="checkbox" name="Amasiado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil5")'>
+ <label for="Amasiado">Amasiado(a)</label>
+ </espaco><espaco>
+ <input id="ckbEstadoCivil6" type="checkbox" name="Separado" onclick='evt_ckbMarcarDesmarcarCheckBoxEstadoCivil("ckbEstadoCivil6")'>
+ <label for="Separado">Separado(a)</label>
+ </espaco>
+ </div>
+ <p class="erroMensagem" id="mensagemErro18" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ <td colspan="1">
+ <p>Cartão Adicional</p>
+ <div id="divCartaoAdicional">
+ <input id="ckbCartaoAdicional1" type="checkbox" name="Sim" onclick='evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional("ckbCartaoAdicional2","ckbCartaoAdicional1")'>
+ <label for="Sim">Sim</label>
+ <input id="ckbCartaoAdicional2" type="checkbox" name="Não" onclick='evt_ckbMarcarDesmarcarCheckBoxCartaoAdicional("ckbCartaoAdicional1","ckbCartaoAdicional2")'>
+ <label for="Não">Não</label>
+ </div>
+ <p class="erroMensagem" id="mensagemErro19" style="color:red;">*Este campo é obrigatório</p>
+ </td>
+ </tr>
+ <tr>
+ <td colspan="4">
+ <div class="esconder" id="divEsconde1"><p>Nome Cônjuge</p>
+ <input name="txtDadosConjuge1" id="txtDadosConjuge1" type="text" value="" style="height:30" size="179px" onblur='evt_onBlurTextBoxes("txtDadosConjuge1","mensagemErro20")'/>
+ <p class="erroMensagem" id="mensagemErro20" style="color:red;">*Este campo é obrigatório</p></div>
+ </td>
+ </tr>
 
-    <tr>
-        <td colspan="1" width="400">
-            <div class="esconder" id="divEsconde2"><p>CPF</p>
-            <input name="txtDadosConjuge2" id="txtDadosConjuge2" type="text" value="" style="height:30" size="62px" onblur='evt_onBlurTextBoxes("txtDadosConjuge2","mensagemErro21")'/>
-            <p class="erroMensagem" id="mensagemErro21" style="color:red;">*Este campo é obrigatório</p></div>
-        </td>
-        <td colspan="1" width="300">
-            <div class="esconder" id="divEsconde3"><p>RG</p>
-            <input name="txtDadosConjuge3" id="txtDadosConjuge3" type="text" value="" style="height:30" size="62px" onblur='evt_onBlurTextBoxes("txtDadosConjuge3","mensagemErro22")'/>
-            <p class="erroMensagem" id="mensagemErro22" style="color:red;">*Este campo é obrigatório</p></div>
-        </td>
-        <td colspan="1" width="200">
-            <div class="esconder" id="divEsconde4"><p>Órgão Emissor</p>
-            <input name="txtDadosConjuge4" id="txtDadosConjuge4" type="text" value="" style="height:30" size="23px" onblur='evt_onBlurTextBoxes("txtDadosConjuge4","mensagemErro23")'/>
-            <p class="erroMensagem" id="mensagemErro23" style="color:red;">*Este campo é obrigatório</p></div>
-        </td>
-        <td colspan="1" width="200">
-            <div class="esconder" id="divEsconde5"><p>Data de Nascimento</p>
-            <input name="txtDadosConjuge5" id="txtDadosConjuge5" type="text" value="" style="height:30" size="14px" onblur='evt_onBlurTextBoxes("txtDadosConjuge5","mensagemErro24")'/>
-            <p class="erroMensagem" id="mensagemErro24" style="color:red;">*Este campo é obrigatório</p></div>
-        </td>
+ <tr>
+ <td colspan="1" width="400">
+ <div class="esconder" id="divEsconde2"><p>CPF Cônjuge</p>
+ <input name="txtDadosConjuge2" id="txtDadosConjuge2" type="text" value="" style="height:30" size="62px" onblur='evt_onBlurTextBoxes("txtDadosConjuge2","mensagemErro21")'/>
+ <p class="erroMensagem" id="mensagemErro21" style="color:red;">*Este campo é obrigatório</p></div>
+ </td>
+ <td colspan="1" width="300">
+ <div class="esconder" id="divEsconde3"><p>RG Cônjuge</p>
+ <input name="txtDadosConjuge3" id="txtDadosConjuge3" type="text" value="" style="height:30" size="62px" onblur='evt_onBlurTextBoxes("txtDadosConjuge3","mensagemErro22")'/>
+ <p class="erroMensagem" id="mensagemErro22" style="color:red;">*Este campo é obrigatório</p></div>
+ </td>
+ <td colspan="1" width="200">
+ <div class="esconder" id="divEsconde4"><p>Órgão Emissor</p>
+ <input name="txtDadosConjuge4" id="txtDadosConjuge4" type="text" value="" style="height:30" size="23px" onblur='evt_onBlurTextBoxes("txtDadosConjuge4","mensagemErro23")'/>
+ <p class="erroMensagem" id="mensagemErro23" style="color:red;">*Este campo é obrigatório</p></div>
+ </td>
+ <td colspan="1" width="200">
+ <div class="esconder" id="divEsconde5"><p>Data de Nascimento Cônjuge</p>
+ <input name="txtDadosConjuge5" id="txtDadosConjuge5" type="text" value="" style="height:30" size="14px" onblur='evt_onBlurTextBoxes("txtDadosConjuge5","mensagemErro24")'/>
+ <p class="erroMensagem" id="mensagemErro24" style="color:red;">*Este campo é obrigatório</p></div>
+ </td>
 </table>
 
 <h1 style="padding-left: 485px;">ENDEREÇO PARA CORRESPONDÊNCIA</h1>
 <table width="1300">
-    <tr>
-        <td colspan="1">
-            <p>CEP</p>
-            <input name="txtCEPCorrespondencia" id="txtCEPCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
-        </td>
-        <td colspan="3">
-            <p>Endereço</p>
-            <input name="txtEndereçoCorrespondencia" id="txtEndereçoCorrespondencia" type="text" value="" style="height:30" size="104px" readonly="true"/>
-        </td>
-        <td colspan="1">
-            <p>Número</p>
-            <input name="txtNumeroCorrespondencia" id="txtNumeroCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="1">
-            <p>Complemento</p>
-            <input name="txtComplementoCorrespondencia" id="txtComplementoCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
-        </td>
-        <td colspan="2">
-            <p>Bairro</p>
-            <input name="txtBairroCorrespondencia" id="txtBairroCorrespondencia" type="text" value="" style="height:30" size="68px" readonly="true"/>
-        </td>
-        <td colspan="1">
-            <p>Cidade</p>
-            <input name="txtCidadeCorrespondencia" id="txtCidadeCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
-        </td>
-        <td colspan="1">
-            <p>Estado</p>
-            <input name="txtEstadoCorrespondencia" id="txtEstadoCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
-        </td>
-    </tr>
+ <tr>
+ <td colspan="1">
+ <p>CEP</p>
+ <input name="txtCEPCorrespondencia" id="txtCEPCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+ </td>
+ <td colspan="3">
+ <p>Endereço</p>
+ <input name="txtEndereçoCorrespondencia" id="txtEndereçoCorrespondencia" type="text" value="" style="height:30" size="104px" readonly="true"/>
+ </td>
+ <td colspan="1">
+ <p>Número</p>
+ <input name="txtNumeroCorrespondencia" id="txtNumeroCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ </td>
+ </tr>
+ <tr>
+ <td colspan="1">
+ <p>Complemento</p>
+ <input name="txtComplementoCorrespondencia" id="txtComplementoCorrespondencia" type="text" value="" style="height:30" size="33px" readonly="true"/>
+ </td>
+ <td colspan="2">
+ <p>Bairro</p>
+ <input name="txtBairroCorrespondencia" id="txtBairroCorrespondencia" type="text" value="" style="height:30" size="68px" readonly="true"/>
+ </td>
+ <td colspan="1">
+ <p>Cidade</p>
+ <input name="txtCidadeCorrespondencia" id="txtCidadeCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ </td>
+ <td colspan="1">
+ <p>Estado</p>
+ <input name="txtEstadoCorrespondencia" id="txtEstadoCorrespondencia" type="text" value="" style="height:30" size="30px" readonly="true"/>
+ </td>
+ </tr>
 </table>
 
 <h1 style="padding-left: 565px;">DADOS PROFISSIONAIS</h1>
 <table width="1300">
-    <tr>
-        <td colspan="4">
-            <p>Empresa</p>
-            <input name="txtEmpresa" id="txtEmpresa" type="text" value="" style="height:30" size="179px"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="1" width="200">
-            <p>Cargo/Função</p>
-            <input name="txtCargo" id="txtCargo" type="text" value="" style="height:30" size="40px"/>
-        </td>
-        <td colspan="1" width="200">
-            <p>Tempo de Trabalho</p>
-            <input name="txtTTrabalho" id="txtTTrabalho" type="text" value="" style="height:30" size="40px"/>
+ <tr>
+ <td colspan="4">
+ <p>Empresa</p>
+ <input name="txtEmpresa" id="txtEmpresa" type="text" value="" style="height:30" size="179px"/>
+ </td>
+ </tr>
+ <tr>
+ <td colspan="1" width="200">
+ <p>Cargo/Função</p>
+ <input name="txtCargo" id="txtCargo" type="text" value="" style="height:30" size="40px"/>
+ </td>
+ <td colspan="1" width="200">
+ <p>Tempo de Trabalho</p>
+ <input name="txtTTrabalho" id="txtTTrabalho" type="text" value="" style="height:30" size="40px"/>
 
-        </td>
-        <td colspan="1" width="400">
-            <p>Tel. Trabalho</p>
-            <input name="txtTelTrabalho" id="txtTelTrabalho" type="text" value="" style="height:30" size="40px"/>
-        </td>
-        <td colspan="1" width="500">
-            <p>Ramal</p>
-            <input name="txtRamal" id="txtRamal" type="text" value="" style="height:30" size="41px"/>
-        </td>
-    </tr>
+ </td>
+ <td colspan="1" width="400">
+ <p>Tel. Trabalho</p>
+ <input name="txtTelTrabalho" id="txtTelTrabalho" type="text" value="" style="height:30" size="40px"/>
+ </td>
+ <td colspan="1" width="500">
+ <p>Ramal</p>
+ <input name="txtRamal" id="txtRamal" type="text" value="" style="height:30" size="41px"/>
+ </td>
+ </tr>
 </table>
 
 <table width="1300">
-    <tr>
-        <td colspan = "4">
-            <p>Renda/Salário</p>
-            <input name="txtSalario" id="txtSalario" type="text" value="" style="height:30" size="67px"/>
-        </td>
-        <td colspan = "4">
-            <p>Outras Rendas</p>
-            <input name="txtOutrasRendas" id="txtOutrasRendas" type="text" value="" style="height:30" size="66px"/>
-        </td>
-        <td colspan = "2">
-            <p>CEP Empresa</p>
-            <input name="txtCEPEmpresa" id="txtCEPEmpresa" type="text" value="" style="height:30" size="33px"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan = "8">
-            <p>Endereço Empresa</p>
-            <input name="txtEndereçoEmpresa" id="txtEndereçoEmpresa" type="text" value="" style="height:30" size="140px"/>
-        </td>
-        <td colspan = "2">
-            <p>Número Empresa</p>
-            <input name="txtNumeroEmpresa" id="txtNumeroEmpresa" type="text" value="" style="height:30" size="33px"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan = "2">
-            <p>Complemento Empresa</p>
-            <input name="txtComplementoEmpresa" id="txtComplementoEmpresa" type="text" value="" style="height:30" size="67px"/>
-        </td>
-        <td colspan = "4">
-            <p>Bairro Empresa</p>
-            <input name="txtBairroEmpresa" id="txtBairroEmpresa" type="text" value="" style="height:30" size="30px"/>
-        </td>
-        <td colspan="2">
-            <p>Cidade Empresa</p>
-            <input name="txtCidadeEmpresa" id="txtCidadeEmpresa" type="text" value="" style="height:30" size="30px"/>
-        </td>
-        <td colspan="2">
-            <p>Estado Empresa</p>
-            <input name="txtEstadoEmpresa" id="txtEstadoEmpresa" type="text" value="" style="height:30" size="33px"/>
-        </td>
-    </tr>
+ <tr>
+ <td colspan = "4">
+ <p>Renda/Salário</p>
+ <input name="txtSalario" id="txtSalario" type="text" value="" style="height:30" size="67px"/>
+ </td>
+ <td colspan = "4">
+ <p>Outras Rendas</p>
+ <input name="txtOutrasRendas" id="txtOutrasRendas" type="text" value="" style="height:30" size="66px"/>
+ </td>
+ <td colspan = "2">
+ <p>CEP Empresa</p>
+ <input name="txtCEPEmpresa" id="txtCEPEmpresa" type="text" value="" style="height:30" size="33px"/>
+ </td>
+ </tr>
+ <tr>
+ <td colspan = "8">
+ <p>Endereço Empresa</p>
+ <input name="txtEndereçoEmpresa" id="txtEndereçoEmpresa" type="text" value="" style="height:30" size="140px"/>
+ </td>
+ <td colspan = "2">
+ <p>Número Empresa</p>
+ <input name="txtNumeroEmpresa" id="txtNumeroEmpresa" type="text" value="" style="height:30" size="33px"/>
+ </td>
+ </tr>
+ <tr>
+ <td colspan = "2">
+ <p>Complemento Empresa</p>
+ <input name="txtComplementoEmpresa" id="txtComplementoEmpresa" type="text" value="" style="height:30" size="67px"/>
+ </td>
+ <td colspan = "4">
+ <p>Bairro Empresa</p>
+ <input name="txtBairroEmpresa" id="txtBairroEmpresa" type="text" value="" style="height:30" size="30px"/>
+ </td>
+ <td colspan="2">
+ <p>Cidade Empresa</p>
+ <input name="txtCidadeEmpresa" id="txtCidadeEmpresa" type="text" value="" style="height:30" size="30px"/>
+ </td>
+ <td colspan="2">
+ <p>Estado Empresa</p>
+ <input name="txtEstadoEmpresa" id="txtEstadoEmpresa" type="text" value="" style="height:30" size="33px"/>
+ </td>
+ </tr>
 </table>
 <h1 style="padding-left: 460px; color: darkblue; background-color: lightblue; font-size: 14px;">Assinale a melhor opção de data para o vencimento da sua fatura</br></h1>
-    <div class="classeFundo" id="divVencimentoDaFatura"><espaco2>
-    <input id="ckbDiaOpcao1" type="checkbox" name="Dia7" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao1")'>
-    <label for="Dia7">7</label>
-    </espaco2><espaco3>
-    <input id="ckbDiaOpcao2" type="checkbox" name="Dia14" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao2")'>
-    <label for="Dia14">14</label>
-    </espaco3><espaco3>
-    <input id="ckbDiaOpcao3" type="checkbox" name="Dia21" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao3")'>
-    <label for="Dia21">21</label>
-    </espaco3><espaco3>
-    <input id="ckbDiaOpcao4" type="checkbox" name="Dia27" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao4")'>
-    <label for="Dia27">27</label>
-    </espaco3></div>
-    <p class="erroMensagem" id="mensagemErro25" style="color:red;">*Este campo é obrigatório</p></div>
-    <input id="btnEnviar" name="btnEnviar" type="button" value="Enviar Dados" class="button" onclick="evt_onClickButton()">
-    </br>
-    <input id="txtTotalPagar" name="txtTotalPagar" type="text" value="R$ 00,00" readonly="true" class="totalPagarClass" size="5">
+ <div class="classeFundo" id="divVencimentoDaFatura"><espaco2>
+ <input id="ckbDiaOpcao1" type="checkbox" name="Dia7" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao1")'>
+ <label for="Dia7">7</label>
+ </espaco2><espaco3>
+ <input id="ckbDiaOpcao2" type="checkbox" name="Dia14" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao2")'>
+ <label for="Dia14">14</label>
+ </espaco3><espaco3>
+ <input id="ckbDiaOpcao3" type="checkbox" name="Dia21" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao3")'>
+ <label for="Dia21">21</label>
+ </espaco3><espaco3>
+ <input id="ckbDiaOpcao4" type="checkbox" name="Dia27" onclick='evt_ckbMarcarDesmarcarCheckBoxVencimentoFatura("ckbDiaOpcao4")'>
+ <label for="Dia27">27</label>
+ </espaco3></div>
+ <p class="erroMensagem" id="mensagemErro25" style="color:red;">*Este campo é obrigatório</p></div>
+ <input id="btnEnviar" name="btnEnviar" type="button" value="Enviar Dados" class="button" onclick="evt_onClickButton()">
+ </br>
+ <input id="txtTotalPagar" name="txtTotalPagar" type="text" value="R$ 0.00" readonly="true" class="totalPagarClass" size="5">
 </br>
 </br>
 </br>
